@@ -40,6 +40,6 @@ setup(name=module_name,
       install_requires =['blogofile'],
       entry_points = {
         "blogofile.plugins":
-            ["{module_name} = {module_name}".format(locals())]
+            ["{module_name} = {module_name}".format(**locals())]
         }
       )

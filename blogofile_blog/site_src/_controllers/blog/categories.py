@@ -1,20 +1,20 @@
 import os
 import shutil
 import operator
-import feed
 from blogofile.cache import bf
 
-blog = bf.config.controllers.blog
+from . import blog, tools
+import feed
 
 def run():
     write_categories()
 
 def sort_into_categories():
     categories = set()
-    for post in blog.posts:
+    for post in blog.iter_posts_published():
         categories.update(post.categories)
     for category in categories:
-        category_posts = [post for post in blog.posts
+        category_posts = [post for post in blog.iter_posts_published()
                             if category in post.categories]
         blog.categorized_posts[category] = category_posts
     for category, posts in sorted(
@@ -26,7 +26,7 @@ def write_categories():
     root = bf.util.path_join(blog.path, blog.category_dir)
     #Find all the categories:
     categories = set()
-    for post in blog.posts:
+    for post in blog.iter_posts_published():
         categories.update(post.categories)
     for category, category_posts in blog.categorized_posts.items():
         #Write category RSS feed
@@ -64,7 +64,7 @@ def write_categories():
                 "prev_link": prev_link,
                 "next_link": next_link
             }
-            blog.mod.materialize_template("chronological.mako", path, env)
+            tools.materialize_template("chronological.mako", path, env)
             
             #Copy category/1 to category/index.html
             if page_num == 1:

@@ -16,6 +16,7 @@ import operator
 import urlparse
 import hashlib
 import codecs
+import base64
 
 import pytz
 import yaml
@@ -72,7 +73,6 @@ class PostParseException(Exception):
     def __str__(self):
         return repr(self.value)
 
-
 class Post(object):
     """
     Class to describe a blog post and associated metadata
@@ -127,15 +127,15 @@ class Post(object):
         if self.filters is None:
             try:
                 file_extension = os.path.splitext(self.filename)[-1][1:]
-                self.filters = bf.config.controllers.blog.post.default_filters[
+                self.filters = blog_config.post.default_filters[
                     file_extension]
             except KeyError:
                 self.filters = []
         self.content = bf.filter.run_chain(self.filters, post_src)
         
     def __parse_post_excerpting(self):
-        if bf.config.controllers.blog.post_excerpts.enabled:
-            length = bf.config.controllers.blog.post_excerpts.word_length
+        if blog_config.post_excerpts.enabled:
+            length = blog_config.post_excerpts.word_length
             try:
                 self.excerpt = bf.config.post_excerpt(self.content, length)
             except AttributeError:
@@ -177,12 +177,18 @@ class Post(object):
 
         if not self.categories or len(self.categories) == 0:
             self.categories = set([Category('Uncategorized')])
+        if self.guid:
+            uuid = urllib.quote(self.guid) #used for expandling :uuid in permalink template code below
+        else:
+            toHash = self.date.isoformat() + self.title.encode('utf8')
+            self.guid = base64.urlsafe_b64encode(hashlib.sha1(toHash).digest())
+            uuid = self.guid 
         if not self.permalink and \
-                bf.config.controllers.blog.auto_permalink.enabled:
+                blog_config.auto_permalink.enabled:
             self.permalink = bf.config.site.url.rstrip("/") + \
-                bf.config.controllers.blog.auto_permalink.path
+                blog_config.auto_permalink.path
             self.permalink = \
-                    re.sub(":blog_path", bf.config.blog.path, self.permalink)
+                    re.sub(":blog_path", blog_config.path, self.permalink)
             self.permalink = \
                     re.sub(":year", self.date.strftime("%Y"), self.permalink)
             self.permalink = \
@@ -197,9 +203,8 @@ class Post(object):
                     ":filename", re.sub(
                             "[ ?]", "-", self.filename).lower(), self.permalink)
 
-            # Generate sha hash based on title
-            self.permalink = re.sub(":uuid", hashlib.sha1(
-                    self.title.encode('utf-8')).hexdigest(), self.permalink)
+            # See guid logic above
+            self.permalink = re.sub(":uuid", uuid, self.permalink)
 
         logger.debug(u"Permalink: {0}".format(self.permalink))
      
@@ -250,8 +255,7 @@ class Post(object):
         try:
             if y['draft']:
                 self.draft = True
-                logger.info(u"Post {0} is set to draft, "
-                        "ignoring this post".format(self.filename))
+                logger.info(u"Ignoring Draft Post: {0}".format(self.filename))
             else:
                 self.draft = False
         except KeyError:
@@ -288,8 +292,8 @@ class Category(object):
         # TODO: consider making url_name and path read-only properties?
         self.url_name = self.name.lower().replace(" ", "-")
         self.path = bf.util.site_path_helper(
-                bf.config.controllers.blog.path,
-                bf.config.controllers.blog.category_dir,
+                blog_config.path,
+                blog_config.category_dir,
                 self.url_name)
 
     def __eq__(self, other):
