@@ -5,6 +5,8 @@ import blogofile
 import blogofile.plugin
 from blogofile.cache import bf, HierarchicalCache as HC
 
+import commands
+
 ## Configure the plugin meta information:
 __dist__ = dict(
     #The name of your plugin:
@@ -23,7 +25,9 @@ __dist__ = dict(
     #PyPI description, could be the same, except this text
     #should mention the fact that this is a Blogofile plugin
     #because non-Blogofile users will see this text:
-    pypi_description = "A simple blog engine plugin for Blogofile"
+    pypi_description = "A simple blog engine plugin for Blogofile",
+    #Command parser
+    command_parser_setup = commands.setup_parser
     )
 
 __version__ = __dist__["version"]
@@ -57,6 +61,12 @@ config = HC(
     # path is relative to site_url
     auto_permalink = HC(enabled=True,
                          path=":blog_path/:year/:month/:day/:title"),
+    # Automatic Post filenames
+    # Post can be created automatically with:
+    #   blogofile blog post create "Post Title"
+    # auto_post_filename defines the filename format for posts
+    # created this way.
+    auto_post_filename = ":year-:month-:day - :title.markdown",
     #### Disqus.com comment integration ####
     disqus = HC(enabled=False,
                  name="your_disqus_name"),
@@ -87,7 +97,7 @@ config = HC(
     category_dir = "category",
     priority = 90.0,
     base_template = "site.mako",
-    template_path = "_templates/blog",
+    template_path = None,
     #Posts
     post = HC(
         date_format = "%Y/%m/%d %H:%M:%S",

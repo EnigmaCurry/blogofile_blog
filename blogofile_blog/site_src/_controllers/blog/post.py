@@ -369,3 +369,49 @@ def parse_posts(directory):
             posts.append(p)
     posts.sort(key=operator.attrgetter('date'), reverse=True)
     return posts
+
+def create_post_filename(spec, title, date):
+    filename = spec
+    filename = re.sub(":title", create_slug(title), filename)
+    filename = re.sub(":year", date.strftime("%Y"), filename)
+    filename = re.sub(":month", date.strftime("%m"), filename)
+    filename = re.sub(":day", date.strftime("%d"), filename)
+    filename = re.sub(":hour", date.strftime("%H"), filename)
+    filename = re.sub(":minute", date.strftime("%M"), filename)
+    filename = re.sub(":second", date.strftime("%S"), filename)
+    return filename
+
+def create_post_template(title,**params):
+    params['title'] = title
+    if params.has_key("date"):
+        date = params['date']
+    else:
+        date = params['date'] = datetime.datetime.now()
+    if not params.has_key("uuid"):
+        params['uuid'] = create_guid(title, date)
+    if not params.has_key("filename"):
+        params['filename'] = ""
+    if not params.has_key("permalink"):
+        params['permalink'] = create_permalink(
+            blog_config.auto_permalink.path, bf.config.site.url,
+            blog_config.path, **params)
+    params['date'] = date.strftime("%Y/%m/%d %H:%M:%S")
+    params['categories'] = ""
+    template = """---
+title: {title}
+permalink: {permalink}
+date: {date}
+categories: {categories}
+guid: {uuid}
+---
+""".format(**params)
+    if not os.path.isdir("_posts"):
+        util.mkdir("_posts")
+    post_filename = os.path.join("_posts",create_post_filename(
+                ":year-:month-:day - :title.markdown", title, date))
+    if os.path.exists(post_filename):
+        logger.error("A file already exists called {0}, I won't overwrite it.".format(post_filename))
+        return
+    with open(post_filename,"w") as f:
+        f.write(template)
+        

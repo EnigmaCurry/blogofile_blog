@@ -42,7 +42,12 @@ def init():
     tools.template_lookup.put_template(
         "blog_base_template",tools.template_lookup.get_template(
             config["base_template"]))
-    tools.add_template_dir(os.path.join(tools.get_src_dir(),config.template_path))
+    #Figure out if we'll use the built in templates, or if the user will
+    #provide their own:
+    template_path = os.path.abspath(config.template_path) if \
+        config.template_path else \
+        os.path.join(tools.get_src_dir(),"_templates/blog")
+    tools.add_template_dir(template_path)
 
 def run():
     import post
