@@ -6,6 +6,13 @@ import imp
 
 import blogofile.main
 
+def load_env():
+    global tools, post
+    from . import tools
+    sys.path.insert(0,os.path.join(tools.get_src_dir(),"_controllers"))
+    from blog import post
+    sys.path.pop(0)
+    
 def setup_parser(parent_parser, parser_template):
     from . import __dist__
     #Add additional subcommands under the blog parser:
@@ -28,10 +35,13 @@ def setup_parser(parent_parser, parser_template):
         "create", help="Create a new blog post", parents=[parser_template])
     blog_post_create.add_argument("TITLE", help="Title of new blog post")
     blog_post_create.set_defaults(func=create_post)
+    blog_post_list = blog_post_subparsers.add_parser(
+        "list", help="List blog posts", parents=[parser_template])
+    blog_post_list.set_defaults(func=list_posts)
 
 def copy_templates(args):
     """Copy the blog templates to the given directory"""
-    from . import tools
+    load_env()
     try:
         shutil.copytree(os.path.join(tools.get_src_dir(),"_templates","blog"),args.DEST)
     except OSError:
@@ -43,8 +53,14 @@ def copy_templates(args):
     
 def create_post(args):
     blogofile.main.config_init(args)
-    from . import tools
-    sys.path.insert(0,os.path.join(tools.get_src_dir(),"_controllers"))
-    from blog import post
-    sys.path.pop(0)
+    load_env()
     post.create_post_template(args.TITLE)
+
+def list_posts(args):
+    blogofile.main.config_init(args)
+    load_env()
+    posts = post.parse_posts("_posts")
+    p_num = len(posts)
+    for p in reversed(post.parse_posts("_posts")):
+        print u"{0} | {1} | {2} | {3}".format(str(p_num).rjust(4), p.date.strftime("%Y/%m/%d"), p.title, p.filename)
+        p_num -= 1

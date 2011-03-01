@@ -20,7 +20,7 @@ __dist__ = dict(
     version = "0.8",
     #The URL for the plugin (where to download, documentation etc):
     url = "http://www.blogofile.com",
-    #The description of your plugin presented to other Blogofile users:
+    #A one line description of your plugin presented to other Blogofile users:
     description = "A simple blog engine",
     #PyPI description, could be the same, except this text
     #should mention the fact that this is a Blogofile plugin
