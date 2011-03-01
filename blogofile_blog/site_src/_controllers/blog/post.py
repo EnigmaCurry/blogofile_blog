@@ -6,7 +6,6 @@ post.py parses post sources from the ./_post directory.
 """
 
 __author__ = "Ryan McGuire (ryan@enigmacurry.com)"
-__date__   = "Mon Feb  2 21:21:04 2009"
 
 import os
 import sys
@@ -17,12 +16,14 @@ import urlparse
 import hashlib
 import codecs
 import base64
+import urllib
 
 import pytz
 import yaml
 import logging
 import BeautifulSoup
 
+from blogofile import util
 import blogofile_bf as bf
 
 logger = logging.getLogger("blogofile.post")
@@ -168,7 +169,7 @@ class Post(object):
                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         
         if not self.slug:
-            self.slug = re.sub("[ ?]", "-", self.title).lower()
+            self.slug = create_slug(self.title)
 
         if not self.date:
             self.date = datetime.datetime.now(pytz.timezone(self.__timezone))
@@ -180,32 +181,13 @@ class Post(object):
         if self.guid:
             uuid = urllib.quote(self.guid) #used for expandling :uuid in permalink template code below
         else:
-            toHash = self.date.isoformat() + self.title.encode('utf8')
-            self.guid = base64.urlsafe_b64encode(hashlib.sha1(toHash).digest())
-            uuid = self.guid 
+            self.guid = uuid = create_guid(self.title, self.date)
         if not self.permalink and \
                 blog_config.auto_permalink.enabled:
-            self.permalink = bf.config.site.url.rstrip("/") + \
-                blog_config.auto_permalink.path
-            self.permalink = \
-                    re.sub(":blog_path", blog_config.path, self.permalink)
-            self.permalink = \
-                    re.sub(":year", self.date.strftime("%Y"), self.permalink)
-            self.permalink = \
-                    re.sub(":month", self.date.strftime("%m"), self.permalink)
-            self.permalink = \
-                    re.sub(":day", self.date.strftime("%d"), self.permalink)
-            self.permalink = \
-                    re.sub(":title", self.slug, self.permalink)
-
-            # TODO: slugification should be abstracted out somewhere reusable
-            self.permalink = re.sub(
-                    ":filename", re.sub(
-                            "[ ?]", "-", self.filename).lower(), self.permalink)
-
-            # See guid logic above
-            self.permalink = re.sub(":uuid", uuid, self.permalink)
-
+            self.permalink = create_permalink(
+                blog_config.auto_permalink.path, bf.config.site.url,
+                blog_config.path, self.title, self.date, uuid, self.filename)
+        
         logger.debug(u"Permalink: {0}".format(self.permalink))
      
     def __parse_yaml(self, yaml_src):
@@ -310,6 +292,48 @@ class Category(object):
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
+def create_guid(title, date):
+    toHash = date.isoformat() + title.encode('utf8')
+    return base64.urlsafe_b64encode(hashlib.sha1(toHash).digest())
+
+def create_slug(title):
+    return re.sub("[ ?]", "-", title).lower()
+
+def create_permalink(auto_permalink_path, site_url,
+                     blog_path, title, date, uuid, filename):
+    """
+    >>> d = {"site_url" : "http://www.example.com",\
+         "blog_path" : "/blog",\
+         "title" : "Test Title",\
+         "date" : datetime.datetime(2011, 2, 28),\
+         "uuid" : "123456789-aaaa-12345",\
+         "filename" : "001-post-one.markdown" }
+    >>> create_permalink(":blog_path/:year/:month/:title",**d)
+    'http://www.example.com/blog/2011/02/test-title'
+    >>> create_permalink("/:uuid/fuzz/:filename",**d)
+    'http://www.example.com/123456789-aaaa-12345/fuzz/001-post-one.markdown'
+    """
+    permalink = site_url.rstrip("/") + auto_permalink_path
+    permalink = \
+        re.sub(":blog_path", blog_path, permalink)
+    permalink = \
+        re.sub(":year", date.strftime("%Y"), permalink)
+    permalink = \
+        re.sub(":month", date.strftime("%m"), permalink)
+    permalink = \
+        re.sub(":day", date.strftime("%d"), permalink)
+    permalink = \
+        re.sub(":hour", date.strftime("%H"), permalink)
+    permalink = \
+        re.sub(":minute", date.strftime("%M"), permalink)
+    permalink = \
+        re.sub(":second", date.strftime("%S"), permalink)
+    permalink = \
+        re.sub(":title", create_slug(title), permalink)
+    permalink = \
+        re.sub(":filename", create_slug(filename), permalink)
+    permalink = re.sub(":uuid", uuid, permalink)
+    return permalink
 
 def parse_posts(directory):
     """Retrieve all the posts from the directory specified.
