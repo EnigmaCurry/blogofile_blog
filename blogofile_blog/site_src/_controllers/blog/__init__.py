@@ -58,6 +58,10 @@ def run():
     import permapage
     #Parse the posts
     blog.posts = post.parse_posts("_posts")
+    if blog.post.post_process:
+        #The user may define their own callback to process posts after
+        #they have been parsed but before we've done any actual work.
+        blog.post.post_process()
     blog.iter_posts = iter_posts
     blog.iter_posts_published = iter_posts_published
     blog.dir = bf.util.path_join(bf.writer.output_dir, blog.path)

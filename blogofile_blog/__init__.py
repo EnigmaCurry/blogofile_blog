@@ -114,7 +114,10 @@ config = HC(
            "org": "syntax_highlight, org",
            "rst": "syntax_highlight, rst",
            "html": "syntax_highlight"
-           }
+           },
+        #An optional callback to run after all the posts are parsed
+        #but before anything else is done with them.
+        post_process = None
         )
     )
 
