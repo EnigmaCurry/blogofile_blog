@@ -102,6 +102,9 @@ config = HC(
     post = HC(
         date_format = "%Y/%m/%d %H:%M:%S",
         encoding = "utf-8",
+        #What files in _posts directory should we consider posts?
+        file_regex = ".*((\.textile$)|(\.markdown$)|(\.md$)|"\
+            "(\.org$)|(\.html$)|(\.txt$)|(\.rst$))",
         #### Default post filters ####
         # If a post does not specify a filter chain, use the
         # following defaults based on the post file extension:
