@@ -108,7 +108,7 @@ class Post(object):
         yaml_sep = re.compile("^---$", re.MULTILINE)
         content_parts = yaml_sep.split(self.source, maxsplit=2)
         if len(content_parts) < 2:
-            raise PostParseException(u"{0}: Post has no YAML section".format(
+            raise PostParseException(u"Post has no YAML section: {0}".format(
                     self.filename))
         else:
             #Extract the yaml at the top
@@ -191,7 +191,18 @@ class Post(object):
         logger.debug(u"Permalink: {0}".format(self.permalink))
      
     def __parse_yaml(self, yaml_src):
-        y = yaml.load(yaml_src)
+        try:
+            y = yaml.load(yaml_src)
+        except yaml.YAMLError as e:
+            linenum = 1
+            if getattr(e, 'context_mark', None):
+                linenum = 1 + e.context_mark.line
+            raise PostParseException(
+                u"Post has bad YAML section: {0}:{1}".format(
+                    self.filename, linenum, str(e)))
+        if not isinstance(y, dict):
+            raise PostParseException(
+                u"Post has bad YAML section: {0}".format(self.filename))
         # Load all the fields that require special processing first:
         fields_need_processing = ('permalink', 'guid', 'date', 'updated',
                                   'categories', 'tags', 'draft')
