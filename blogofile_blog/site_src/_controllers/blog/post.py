@@ -179,7 +179,7 @@ class Post(object):
             self.updated = self.date
 
         if not self.categories or len(self.categories) == 0:
-            self.categories = set([Category('Uncategorized')])
+            self.categories = set([Category('uncategorized')])
         if self.guid:
             uuid = urllib.quote(self.guid) #used for expandling :uuid in permalink template code below
         else:
@@ -235,8 +235,12 @@ class Post(object):
         except KeyError:
             pass
         try:
-            self.categories = set([Category(x.strip()) for x in \
-                                       y['categories'].split(",")])
+            if config.categories.case_sensitive:
+                self.categories = set([Category(x.strip()) for x in \
+                                           y['categories'].split(",")])
+            else:
+                self.categories = set([Category(x.strip().lower()) for x in \
+                                           y['categories'].split(",")])
         except:
             pass
         try:

@@ -121,7 +121,10 @@ config = HC(
         #Default Slugification function uses post titles.  User may
         #redefine their own function here, single argument is the Post
         #object:
-        slugify = None
+        slugify = None,
+        categories = HC(
+            case_sensitive = False
+            )
         )
     )
 
