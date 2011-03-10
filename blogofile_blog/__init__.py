@@ -117,7 +117,11 @@ config = HC(
            },
         #An optional callback to run after all the posts are parsed
         #but before anything else is done with them.
-        post_process = None
+        post_process = None,
+        #Default Slugification function uses post titles.  User may
+        #redefine their own function here, single argument is the Post
+        #object:
+        slugify = None
         )
     )
 

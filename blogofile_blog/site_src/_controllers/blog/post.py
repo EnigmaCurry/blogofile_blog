@@ -167,10 +167,12 @@ class Post(object):
         if not self.title:
             self.title = u"Untitled - {0}".format(
                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        
         if not self.slug:
-            self.slug = create_slug(self.title)
-
+            if config.slugify:
+                #The use has provided their own slugify function, use that:
+                self.slug = config.slugify(self)
+            else:
+                self.slug = create_slug(self.title)
         if not self.date:
             self.date = datetime.datetime.now(pytz.timezone(self.__timezone))
         if not self.updated:
