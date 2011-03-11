@@ -3,6 +3,7 @@ import os
 
 import pygments
 from pygments import formatters, util, lexers
+from blogofile.cache import HierarchicalCache as HC
 import blogofile_bf as bf
 
 #Example usage:    
@@ -52,17 +53,19 @@ $$/code
 This is normal text
 """
 
-config = {"name": "Syntax Highlighter",
-          "description": "Highlights blocks of code based on syntax",
-          "author": "Ryan McGuire",
-          "css_dir": "/css",
-          "preload_styles": []}
+meta = {"name": "Syntax Highlighter",
+        "description": "Highlights blocks of code based on syntax",
+        "author": "Ryan McGuire"}
 
+config = HC(
+        css_dir = "/css",
+        preload_styles = ["murphy"],
+        style = "murphy")
 
 def init():
     #This filter normally only loads pygments styles when needed.
     #This will force a particular style to get loaded at startup.
-    for style in bf.config.filters.syntax_highlight.preload_styles:
+    for style in config.preload_styles:
         css_class = "pygments_{0}".format(style)
         formatter = pygments.formatters.HtmlFormatter(
             linenos=False, cssclass=css_class, style=style)
@@ -121,7 +124,7 @@ def parse_args(args):
 
 
 def write_pygments_css(style, formatter,
-        location=bf.config.filters.syntax_highlight.css_dir):
+        location=config.css_dir):
     path = bf.util.path_join("_site", bf.util.fs_site_path_helper(location))
     bf.util.mkdir(path)
     css_file = "pygments_{0}.css".format(style)
@@ -161,7 +164,7 @@ def run(src):
         try:
             style = args['style']
         except KeyError:
-            style = bf.config.filters.syntax_highlight.style
+            style = config.style
         try:
             css_class = args['cssclass']
         except KeyError:
