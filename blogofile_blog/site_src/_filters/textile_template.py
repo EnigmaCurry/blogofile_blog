@@ -1,11 +1,15 @@
 import textile
 
-config = {
+from blogofile.cache import HierarchicalCache as HC
+
+meta = {
     'name': "Textile",
     'description': "Renders textile formatted text to HTML",
-    'aliases': ['textile']
     }
 
+config = HC(
+    aliases = ['textile']
+    )
 
 def run(content):
     return textile.textile(content)

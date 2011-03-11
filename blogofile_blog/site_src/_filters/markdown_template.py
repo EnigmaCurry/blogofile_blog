@@ -16,19 +16,22 @@ filters.markdown.extensions.headerid.enabled    = True
 filters.markdown.extensions.tables.enabled      = True
 """
 
-
-config = {
+meta = {
     "name": "Markdown",
-    "description": "Renders markdown formatted text to HTML",
-    "aliases": ["markdown"],
-    "extensions": HC(def_list    = HC(enabled=False),
-                     abbr        = HC(enabled=False),
-                     footnotes   = HC(enabled=False),
-                     fenced_code = HC(enabled=False),
-                     headerid    = HC(enabled=False),
-                     tables      = HC(enabled=False)),
-    "extension_parameters": HC(headerid = HC(level=1,forceid=True))
+    "author": "Ryan McGuire",
+    "description": "Renders markdown formatted text to HTML"
     }
+
+config = HC(
+    aliases = ["markdown"],
+    extensions = HC(def_list    = HC(enabled=False),
+                    abbr        = HC(enabled=False),
+                    footnotes   = HC(enabled=False),
+                    fenced_code = HC(enabled=False),
+                    headerid    = HC(enabled=False),
+                    tables      = HC(enabled=False)),
+    extension_parameters = HC(headerid = HC(level=1,forceid=True))
+    )
 
 #Markdown logging is noisy, pot it down:
 logging.getLogger("MARKDOWN").setLevel(logging.ERROR)

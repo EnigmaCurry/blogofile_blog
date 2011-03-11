@@ -1,10 +1,16 @@
 import docutils.core
 
-config = {
+from blogofile.cache import HierarchicalCache as HC
+
+meta = {
     'name': "reStructuredText",
     'description': "Renders reStructuredText formatted text to HTML",
-    'aliases': ['rst']
     }
+
+config = HC(
+    aliases = ['rst']
+    )
+
 
 
 def run(content):
