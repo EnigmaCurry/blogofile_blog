@@ -13,7 +13,8 @@ def write_permapages():
     site_re = re.compile(bf.config.site.url, re.IGNORECASE)
     num_posts = len(blog.posts)
     
-    for i, post in enumerate(blog.iter_posts_published()):
+    #Iterate over all the blog posts, even posts set to Draft:
+    for i, post in enumerate(blog.posts):
         if post.permalink:
             path = site_re.sub("", post.permalink)
             blog.logger.info(u"Writing permapage for post: {0}".format(path))
