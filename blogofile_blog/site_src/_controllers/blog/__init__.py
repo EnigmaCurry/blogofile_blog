@@ -64,8 +64,7 @@ def run():
         blog.post.post_process()
     blog.iter_posts = iter_posts
     blog.iter_posts_published = iter_posts_published
-    blog.dir = bf.util.path_join(bf.writer.output_dir, blog.path)
-
+    blog.dir = bf.util.fs_site_path_helper(bf.writer.output_dir, blog.path)
     # Find all the categories and archives before we write any pages
     blog.archived_posts = {} ## "/archive/Year/Month" -> [post, post, ... ]
     blog.archive_links = []  ## [("/archive/2009/12", name, num_in_archive1), ...] (sorted in reverse by date)
@@ -80,5 +79,5 @@ def run():
     chronological.run()
     archives.run()
     categories.run()
-    #feed.run()
+    feed.run()
 

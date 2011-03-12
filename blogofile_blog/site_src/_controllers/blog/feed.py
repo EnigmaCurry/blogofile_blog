@@ -3,7 +3,7 @@ from blogofile.cache import bf
 from . import blog, tools
 
 def run():
-    posts = blog.iter_posts_published()
+    posts = list(blog.iter_posts_published())
     write_feed(posts, bf.util.path_join(blog.path, "feed"), "rss.mako")
     write_feed(posts, bf.util.path_join(blog.path, "feed", "atom"),
                           "atom.mako")
