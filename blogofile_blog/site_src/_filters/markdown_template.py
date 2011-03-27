@@ -40,15 +40,15 @@ extensions = []
 
 def init():
     #Create the list of enabled extensions with their arguments
-    for name, ext in config["extensions"].items():
+    for name, ext in list(config["extensions"].items()):
         if ext.enabled:
             params = []
-            if config["extension_parameters"].has_key(name):
+            if name in config["extension_parameters"]:
                 p = config["extension_parameters"][name]
             else:
                 extensions.append(name)
                 continue
-            for param,value in p.items():
+            for param,value in list(p.items()):
                 params.append(param+"="+repr(value))
             extensions.append(name+"("+",".join(params)+")")
 

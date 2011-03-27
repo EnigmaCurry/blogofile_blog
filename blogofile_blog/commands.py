@@ -45,11 +45,11 @@ def copy_templates(args):
     try:
         shutil.copytree(os.path.join(tools.get_src_dir(),"_templates","blog"),args.DEST)
     except OSError:
-        print "Destination ({0}) already exists.\nYou must choose a path that does not yet exist.".format(args.DEST)
+        print(("Destination ({0}) already exists.\nYou must choose a path that does not yet exist.".format(args.DEST)))
         return
-    print "\nCopied blog templates to : {0}".format(args.DEST)
-    print "To use them, edit your _config.py:"
-    print "\n   plugins.blog.template_path = \"{0}\"\n".format(os.path.relpath(args.DEST,os.curdir))
+    print(("\nCopied blog templates to : {0}".format(args.DEST)))
+    print("To use them, edit your _config.py:")
+    print(("\n   plugins.blog.template_path = \"{0}\"\n".format(os.path.relpath(args.DEST,os.curdir))))
     
 def create_post(args):
     blogofile.main.config_init(args)
@@ -62,5 +62,5 @@ def list_posts(args):
     posts = post.parse_posts("_posts")
     p_num = len(posts)
     for p in reversed(post.parse_posts("_posts")):
-        print u"{0} | {1} | {2} | {3}".format(str(p_num).rjust(4), p.date.strftime("%Y/%m/%d"), p.title, p.filename)
+        print(("{0} | {1} | {2} | {3}".format(str(p_num).rjust(4), p.date.strftime("%Y/%m/%d"), p.title, p.filename)))
         p_num -= 1

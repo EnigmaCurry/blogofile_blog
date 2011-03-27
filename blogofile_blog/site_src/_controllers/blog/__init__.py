@@ -1,6 +1,6 @@
 import os
 import logging
-import urlparse
+import urllib.parse
 from mako.lookup import TemplateLookup
 
 from blogofile.cache import bf
@@ -37,7 +37,7 @@ def iter_posts_published(limit=None):
     return iter_posts(is_publishable,limit)
 
 def init():
-    config["url"] = urlparse.urljoin(bf.config.site.url, config["path"])
+    config["url"] = urllib.parse.urljoin(bf.config.site.url, config["path"])
     #The base template is a configurable option, injected here at runtime:
     tools.template_lookup.put_template(
         "blog_base_template",tools.template_lookup.get_template(
@@ -50,12 +50,12 @@ def init():
     tools.add_template_dir(template_path)
 
 def run():
-    import post
-    import archives
-    import categories
-    import chronological
-    import feed
-    import permapage
+    from . import post
+    from . import archives
+    from . import categories
+    from . import chronological
+    from . import feed
+    from . import permapage
     #Parse the posts
     blog.posts = post.parse_posts("_posts")
     if blog.post.post_process:

@@ -9,7 +9,7 @@
 import operator
 
 from blogofile.cache import bf
-import chronological
+from . import chronological
 
 from . import blog, tools
 
@@ -27,12 +27,12 @@ def sort_into_archives():
         except KeyError:
             blog.archived_posts[link] = [post]
     for archive, posts in sorted(
-        blog.archived_posts.items(), key=operator.itemgetter(0), reverse=True):
+        list(blog.archived_posts.items()), key=operator.itemgetter(0), reverse=True):
         name = posts[0].date.strftime("%B %Y")
         blog.archive_links.append((archive, name, len(posts)))
 
 
 def write_monthly_archives():
-    for link, posts in blog.archived_posts.items():
+    for link, posts in list(blog.archived_posts.items()):
         name = posts[0].date.strftime("%B %Y")
         chronological.write_blog_chron(posts, root=link)

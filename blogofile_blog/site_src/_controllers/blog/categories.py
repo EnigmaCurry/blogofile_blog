@@ -4,7 +4,7 @@ import operator
 from blogofile.cache import bf
 
 from . import blog, tools
-import feed
+from . import feed
 
 def run():
     write_categories()
@@ -18,7 +18,7 @@ def sort_into_categories():
                             if category in post.categories]
         blog.categorized_posts[category] = category_posts
     for category, posts in sorted(
-        blog.categorized_posts.items(), key=operator.itemgetter(0)):
+        list(blog.categorized_posts.items()), key=operator.itemgetter(0)):
         blog.all_categories.append((category, len(posts)))
 
 def write_categories():
@@ -28,7 +28,7 @@ def write_categories():
     categories = set()
     for post in blog.iter_posts_published():
         categories.update(post.categories)
-    for category, category_posts in blog.categorized_posts.items():
+    for category, category_posts in list(blog.categorized_posts.items()):
         #Write category RSS feed
         rss_path = bf.util.fs_site_path_helper(
             blog.path, blog.category_dir,

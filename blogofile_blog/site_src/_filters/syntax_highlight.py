@@ -144,16 +144,16 @@ def run(src):
     for m in code_block_re.finditer(src):
         args = parse_args(m.group('args'))
         #Make default args
-        if args.has_key('lang'):
+        if 'lang' in args:
             lang = args['lang']
-        elif args.has_key('language'):
+        elif 'language' in args:
             lang = args['language']
         else:
             lang = 'text'
         try:
-            if args.has_key('linenums'):
+            if 'linenums' in args:
                 linenums = args['linenums']
-            elif args.has_key("linenos"):
+            elif "linenos" in args:
                 linenums = args['linenos']
             if linenums.lower().strip() == "true":
                 linenums = True

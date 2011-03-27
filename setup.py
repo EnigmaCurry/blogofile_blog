@@ -37,7 +37,6 @@ setup(name=module_name,
       packages=[module_name],
       package_data = find_package_data(module_name,"site_src"),
       include_package_data = True,
-      install_requires =['blogofile'],
       entry_points = {
         "blogofile.plugins":
             ["{module_name} = {module_name}".format(**locals())]
