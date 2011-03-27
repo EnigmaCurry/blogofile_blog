@@ -2,3 +2,5 @@
 *~
 /blogofile_blog.egg-info/*
 /build/*
+/MANIFEST
+/dist/*

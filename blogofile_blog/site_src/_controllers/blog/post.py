@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 post.py parses post sources from the ./_post directory.
 """
@@ -16,7 +13,9 @@ import urllib.parse
 import hashlib
 import codecs
 import base64
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 
 import pytz
 import yaml
@@ -301,11 +300,6 @@ class Category(object):
                 blog_config.category_dir,
                 self.url_name)
 
-    def __eq__(self, other):
-        if self.name == other.name:
-            return True
-        return False
-
     def __hash__(self):
         return hash(self.name)
 
@@ -324,10 +318,15 @@ class Category(object):
         return not self<other
     def __le__(self, other):
         return not other<self
-
+    
 def create_guid(title, date):
-    toHash = bytes(date.isoformat() + title,"utf-8")
-    return base64.urlsafe_b64encode(hashlib.sha1(toHash).digest())
+    #This tricky bit is not handled well with 2to3, so we have to hand
+    #craft the python2 translation:
+    if sys.version_info >= (3,):
+        to_hash = eval("bytes(date.isoformat() + title,\"utf-8\")")
+    else:
+        to_hash = eval("date.isoformat() + title.encode(\"utf-8\")")
+    return base64.urlsafe_b64encode(hashlib.sha1(to_hash).digest())
 
 def create_slug(title):
     return re.sub("[ ?]", "-", title).lower()
