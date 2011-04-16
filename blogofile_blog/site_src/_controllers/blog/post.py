@@ -16,6 +16,7 @@ import base64
 import urllib.request
 import urllib.parse
 import urllib.error
+from xml.sax import saxutils
 
 import pytz
 import yaml
@@ -329,7 +330,12 @@ def create_guid(title, date):
     return base64.urlsafe_b64encode(hashlib.sha1(to_hash).digest())
 
 def create_slug(title):
-    return re.sub("[ ?]", "-", title).lower()
+    #Get rid of any html entities
+    slug = saxutils.unescape(title)
+    #Remove any non-valid URL characters (reference RFC 1738 section 2.2)
+    slug = re.sub("[^a-zA-Z0-9$\-_\.+!*'(),]", "-", slug).lower()
+    print(slug)
+    return slug
 
 def create_permalink(auto_permalink_path, site_url,
                      blog_path, title, date, uuid, filename):
