@@ -334,7 +334,6 @@ def create_slug(title):
     slug = saxutils.unescape(title)
     #Remove any non-valid URL characters (reference RFC 1738 section 2.2)
     slug = re.sub("[^a-zA-Z0-9$\-_\.+!*'(),]", "-", slug).lower()
-    print(slug)
     return slug
 
 def create_permalink(auto_permalink_path, site_url,
