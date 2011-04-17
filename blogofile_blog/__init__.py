@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import urllib.parse
+import re
 import blogofile
 import blogofile.plugin
 from blogofile.cache import bf, HierarchicalCache as HC
+
 
 from . import commands
 
@@ -97,6 +99,13 @@ config = HC(
     category_dir = "category",
     priority = 90.0,
     base_template = "site.mako",
+    #Alternative template engine content blocks:
+    template_engines = HC(
+        jinja2 = HC(
+            content_regex = re.compile("{%\W*block content\W*%}.*?{%\W*endblock\W*%}", re.MULTILINE|re.DOTALL )
+            )
+        ),
+    #Where to find the templates? Can be relocated to user-space.
     template_path = None,
     #Posts
     post = HC(
@@ -133,5 +142,3 @@ tools = blogofile.plugin.PluginTools(__name__)
 def init():
     tools.initialize_controllers()
 
-def run():
-    tools.run_controllers()
