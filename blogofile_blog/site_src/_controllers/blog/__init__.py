@@ -2,8 +2,6 @@ import os
 import logging
 import urllib.parse
 from mako.lookup import TemplateLookup
-import shutil
-import tempfile
 
 from blogofile.cache import bf
 from blogofile.cache import HierarchicalCache as HC
@@ -54,7 +52,6 @@ def run():
     from . import chronological
     from . import feed
     from . import permapage
-    from . import templates
     #Parse the posts
     blog.posts = post.parse_posts("_posts")
     if blog.post.post_process:
@@ -74,18 +71,8 @@ def run():
 
     blog.logger = logging.getLogger(config['name'])
     
-    #Create a temporary directory (used for jinja template hacking and
-    #maybe other stuff)
-    blog.temp_proc_dir = tempfile.mkdtemp()
-    templates.setup()
-    try:
-        permapage.run()
-        chronological.run()
-        archives.run()
-        categories.run()
-        feed.run()
-    finally:
-        #Remove the temp dir
-        shutil.rmtree(blog.temp_proc_dir)
-
-    
+    permapage.run()
+    chronological.run()
+    archives.run()
+    categories.run()
+    feed.run()

@@ -1,4 +1,4 @@
-<%inherit file="blog_base_template" />
+<%inherit file="bf_base_template" />
 % for post in posts:
   <%include file="post.mako" args="post=post" />
 % if bf.config.blog.disqus.enabled:
