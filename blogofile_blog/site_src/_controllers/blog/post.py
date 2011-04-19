@@ -16,6 +16,7 @@ import base64
 import urllib.request
 import urllib.parse
 import urllib.error
+import unicodedata
 from xml.sax import saxutils
 
 import pytz
@@ -332,7 +333,10 @@ def create_guid(title, date):
 def create_slug(title):
     #Get rid of any html entities
     slug = saxutils.unescape(title)
-    #Remove any non-valid URL characters (reference RFC 1738 section 2.2)
+    #Try to convert non-ascii characters to their ascii equivalent:
+    slug = str(unicodedata.normalize("NFKD", slug).encode("ascii","ignore"),"utf-8")
+    #Replace any remaining non-valid URL characters
+    #(reference RFC 1738 section 2.2) with dashes:
     slug = re.sub("[^a-zA-Z0-9$\-_\.+!*'(),]", "-", slug).lower()
     return slug
 
