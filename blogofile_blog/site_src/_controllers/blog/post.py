@@ -333,6 +333,9 @@ def create_guid(title, date):
 def create_slug(title):
     #Get rid of any html entities
     slug = saxutils.unescape(title)
+    if sys.version_info < (3,) and type(slug) != unicode:
+        #saxutils.unescape doesn't always return unicode in python2:
+        slug = unicode(slug,"utf-8")
     #Try to convert non-ascii characters to their ascii equivalent:
     slug = str(unicodedata.normalize("NFKD", slug).encode("ascii","ignore"),"utf-8")
     #Replace any remaining non-valid URL characters
