@@ -137,31 +137,25 @@ class Post(object):
     def __parse_post_excerpting(self):
         if blog_config.post_excerpts.enabled:
             length = blog_config.post_excerpts.word_length
-            try:
-                self.excerpt = bf.config.post_excerpt(self.content, length)
-            except AttributeError:
+            if len(self.excerpt) > 0:
+                pass #The user has defined their own excerpt in the post YAML.
+            elif callable(blog_config.post_excerpts.method):
+                self.excerpt = blog_config.post_excerpts.method(self.content, length)
+            else:
                 self.excerpt = self.__excerpt(length)
 
     def __excerpt(self, num_words=50):
-        #Default post excerpting function
-        #Can be overridden in _config.py by
-        #defining post_excerpt(content,num_words)
-        # if len(self.excerpt) == 0:
-        #      """Retrieve excerpt from article"""
-        #      s = BeautifulSoup.BeautifulSoup(self.content)
-        #      # get rid of javascript, noscript and css
-        #      [[tree.extract() for tree in s(elem)] for elem in (
-        #              'script', 'noscript', 'style')]
-        #      # get rid of doctype
-        #      subtree = s.findAll(text=re.compile("DOCTYPE|xml"))
-        #      [tree.extract() for tree in subtree]
-        #      # remove headers
-        #      [[tree.extract() for tree in s(elem)] for elem in (
-        #              'h1', 'h2', 'h3', 'h4', 'h5', 'h6')]
-        #      text = ''.join(s.findAll(text=True))\
-        #                          .replace("\n", "").split(" ")
-        #      return " ".join(text[:num_words]) + '...'
-        return self.content
+        try:
+            import lxml.html
+        except ImportError:
+            print("\nlxml is required in order to create post excerpts.")
+            print("See http://lxml.de/installation.html for installation instructions.")
+            print("You can also turn off post excerpts in your _config.py:")
+            print("\n    plugins.blog.post_excerpts = False\n")
+            sys.exit(1)
+        post_text = lxml.html.fromstring(self.content).text_content()
+        post_words = post_text.split(None,num_words)
+        return " ".join(post_words[:num_words])
         
     def __post_process(self):
         # fill in empty default value

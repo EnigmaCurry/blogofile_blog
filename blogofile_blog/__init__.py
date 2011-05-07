@@ -62,7 +62,7 @@ config = HC(
     # :filename           -> article's filename without suffix
     # path is relative to site_url
     auto_permalink = HC(enabled=True,
-                         path=":blog_path/:year/:month/:day/:title"),
+                        path=":blog_path/:year/:month/:day/:title"),
     # Automatic Post filenames
     # Post can be created automatically with:
     #   blogofile blog post create "Post Title"
@@ -71,7 +71,7 @@ config = HC(
     auto_post_filename = ":year-:month-:day - :title.markdown",
     #### Disqus.com comment integration ####
     disqus = HC(enabled=False,
-                 name="your_disqus_name"),
+                name="your_disqus_name"),
     #### Custom blog index ####
     # If you want to create your own index page at your blog root
     # turn this on. Otherwise blogofile assumes you want the
@@ -83,8 +83,9 @@ config = HC(
     #Also, if you don't like the way the post excerpt is generated
     #You can define assign a new function to blog.post_excerpts.method
     #This method must accept the following arguments: (content, num_words)
-    post_excerpts = HC(enabled=True,
-                        word_length=25),
+    post_excerpts = HC(enabled=False,
+                       word_length=25,
+                       method=None),
     #### Blog pagination directory ####
     # blogofile places extra pages of your blog in
     # a secondary directory like the following:
