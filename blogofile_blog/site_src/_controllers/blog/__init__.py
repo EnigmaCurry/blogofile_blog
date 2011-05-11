@@ -38,12 +38,10 @@ def iter_posts_published(limit=None):
 
 def init():
     config["url"] = urllib.parse.urljoin(bf.config.site.url, config["path"])
-    #Figure out if we'll use the built in templates, or if the user will
-    #provide their own:
-    template_path = os.path.abspath(config.template_path) if \
-        config.template_path else \
-        os.path.join(tools.get_src_dir(),"_templates/blog")
-    tools.add_template_dir(template_path)
+    if config.template_path:
+        #Add the user's custom template path first
+        tools.add_template_dir(config.template_path)
+    tools.add_template_dir(os.path.join(tools.get_src_dir(),"_templates/blog"))
 
 def run():
     from . import post
