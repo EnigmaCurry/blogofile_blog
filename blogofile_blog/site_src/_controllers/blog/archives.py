@@ -16,7 +16,7 @@ from . import blog, tools
 
 def run():
     write_monthly_archives()
-
+    write_index()
 
 def sort_into_archives():
     #This is run in 0.initial.py
@@ -36,3 +36,15 @@ def write_monthly_archives():
     for link, posts in list(blog.archived_posts.items()):
         name = posts[0].date.strftime("%B %Y")
         chronological.write_blog_chron(posts, root=link)
+
+def write_index():
+    month_posts = list(map(operator.itemgetter(1),
+                           sorted(blog.archived_posts.items(),reverse=True)))
+    print(month_posts)
+    
+    env = {
+        "month_posts" : month_posts
+        }
+    tools.materialize_template("archive_index.mako", bf.util.path_join(
+            blog.path, "archive/index.html"), env)
+
