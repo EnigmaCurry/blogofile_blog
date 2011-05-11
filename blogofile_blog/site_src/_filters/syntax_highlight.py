@@ -59,7 +59,7 @@ meta = {"name": "Syntax Highlighter",
 
 config = HC(
         css_dir = "/css",
-        preload_styles = ["murphy"],
+        preload_styles = [],
         style = "murphy")
 
 def init():
@@ -169,6 +169,7 @@ def run(src):
             css_class = args['cssclass']
         except KeyError:
             css_class = "pygments_{0}".format(style)
+        css_class += " syntax_highlight"
         formatter = pygments.formatters.HtmlFormatter(
             linenos=linenums, cssclass=css_class, style=style)
         write_pygments_css(style, formatter)
