@@ -52,15 +52,20 @@ def copy_templates(args):
     print(("\n   plugins.blog.template_path = \"{0}\"\n".format(os.path.relpath(args.DEST,os.curdir))))
     
 def create_post(args):
-    blogofile.main.config_init(args)
+    blogofile.config.init_interactive(args)
     load_env()
     post.create_post_template(args.TITLE)
 
 def list_posts(args):
-    blogofile.main.config_init(args)
+    blogofile.config.init_interactive(args)
+
+    from blogofile import plugin, filter
+    plugin.init_plugins()
+    filter.init_filters()
+    
     load_env()
     posts = post.parse_posts("_posts")
     p_num = len(posts)
-    for p in reversed(post.parse_posts("_posts")):
+    for p in post.parse_posts("_posts"):
         print(("{0} | {1} | {2} | {3}".format(str(p_num).rjust(4), p.date.strftime("%Y/%m/%d"), p.title, p.filename)))
         p_num -= 1
