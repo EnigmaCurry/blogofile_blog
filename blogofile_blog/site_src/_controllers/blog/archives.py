@@ -39,9 +39,7 @@ def write_monthly_archives():
 
 def write_index():
     month_posts = list(map(operator.itemgetter(1),
-                           sorted(blog.archived_posts.items(),reverse=True)))
-    print(month_posts)
-    
+                           sorted(blog.archived_posts.items(),reverse=True)))    
     env = {
         "month_posts" : month_posts
         }
