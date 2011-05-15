@@ -13,7 +13,6 @@ from . import chronological
 
 from . import blog, tools
 
-
 def run():
     write_monthly_archives()
     write_index()

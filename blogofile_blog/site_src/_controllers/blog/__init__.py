@@ -51,7 +51,7 @@ def run():
     from . import feed
     from . import permapage
     #Parse the posts
-    blog.posts = post.parse_posts("_posts")
+    blog.posts = post.parse_posts(blog.post.source_dir)
     if blog.post.post_process:
         #The user may define their own callback to process posts after
         #they have been parsed but before we've done any actual work.

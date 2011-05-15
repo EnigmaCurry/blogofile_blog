@@ -379,7 +379,7 @@ def parse_posts(directory):
     Returns a list of the posts sorted in reverse by date."""
     posts = []
     post_filename_re = re.compile(config.file_regex)
-    if not os.path.isdir("_posts"):
+    if not os.path.isdir(directory):
         logger.warn("This site has no _posts directory.")
         return []
     post_paths = [f for f in bf.util.recursive_file_list(
@@ -440,9 +440,9 @@ categories: {categories}
 guid: {uuid}
 ---
 """.format(**params)
-    if not os.path.isdir("_posts"):
-        util.mkdir("_posts")
-    post_filename = os.path.join("_posts",create_post_filename(
+    if not os.path.isdir(config.source_dir):
+        util.mkdir(config.source_dir)
+    post_filename = os.path.join(config.source_dir,create_post_filename(
                 ":year-:month-:day - :title.markdown", title, date))
     if os.path.exists(post_filename):
         logger.error("A file already exists called {0}, I won't overwrite it.".format(post_filename))

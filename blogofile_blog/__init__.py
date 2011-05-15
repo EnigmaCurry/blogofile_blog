@@ -6,7 +6,6 @@ import blogofile
 import blogofile.plugin
 from blogofile.cache import bf, HierarchicalCache as HC
 
-
 from . import commands
 
 ## Configure the plugin meta information:
@@ -110,6 +109,7 @@ config = HC(
     template_path = None,
     #Posts
     post = HC(
+        source_dir = "_posts",
         date_format = "%Y/%m/%d %H:%M:%S",
         encoding = "utf-8",
         #What files in _posts directory should we consider posts?
