@@ -392,7 +392,8 @@ def parse_posts(directory):
         #It refuses to open files without replacing newlines with CR+LF
         #reverting to regular open and decode:
         try:
-            src = open(post_path, "r").read()
+            with open(post_path, "r") as src_file:
+                src = src_file.read()
         except:
             logger.exception("Error reading post: {0}".format(post_path))
             raise
