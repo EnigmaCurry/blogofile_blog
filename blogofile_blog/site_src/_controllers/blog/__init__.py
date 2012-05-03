@@ -37,7 +37,7 @@ def iter_posts_published(limit=None):
     return iter_posts(is_publishable,limit)
 
 def init():
-    config["url"] = urllib.parse.urljoin(bf.config.site.url, config["path"])
+    config["url"] = bf.config.site.url + config["path"]
     if config.template_path:
         #Add the user's custom template path first
         tools.add_template_dir(config.template_path)
