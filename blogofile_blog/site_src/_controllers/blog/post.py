@@ -416,7 +416,8 @@ def create_post_filename(spec, title, date):
     filename = re.sub(":second", date.strftime("%S"), filename)
     return filename
 
-def create_post_template(title,**params):
+
+def create_post_template(title, **params):
     params['title'] = title
     if "date" in params:
         date = params['date']
@@ -442,11 +443,12 @@ guid: {uuid}
 """.format(**params)
     if not os.path.isdir(config.source_dir):
         util.mkdir(config.source_dir)
-    post_filename = os.path.join(config.source_dir,create_post_filename(
-                ":year-:month-:day - :title.markdown", title, date))
+    markup = blog_config.post.default_markup or "markdown"
+    post_filename = os.path.join(config.source_dir, create_post_filename(
+        ":year-:month-:day - :title.{0}".format(markup), title, date))
     if os.path.exists(post_filename):
-        logger.error("A file already exists called {0}, I won't overwrite it.".format(post_filename))
+        logger.error("A file already exists called {0}, I won't overwrite it."
+                     .format(post_filename))
         return
-    with open(post_filename,"w") as f:
+    with open(post_filename, "w") as f:
         f.write(template)
-        
