@@ -1,10 +1,11 @@
+import argparse
 import shutil
 import sys
 import os, os.path
 import imp
 
 import blogofile.main
-import blogofile.argparse as argparse
+
 
 def load_env():
     global tools, post

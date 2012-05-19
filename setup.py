@@ -29,6 +29,8 @@ def setup_python2():
             "-w {0}".format(tmp_src)))
     return tmp_src
 
+dependencies = []
+
 if sys.version_info < (3,):
     sys.path.insert(0,"src_py2")
     src_root = os.path.join("src_py2","blogofile_blog")
@@ -46,6 +48,8 @@ if sys.version_info < (3,):
               "that can be\ninstalled in either Python 2 or 3.")
         print("-"*80)
         sys.exit(1)
+    if sys.version_info < (2, 7):
+        dependencies.append("argparse")
 else:
     src_root = "blogofile_blog"
     import blogofile_blog
@@ -78,6 +82,7 @@ setup(name="blogofile_blog",
       package_dir = {"blogofile_blog": src_root},
       package_data = find_package_data("blogofile_blog","site_src"),
       include_package_data = True,
+      install_requires = dependencies,
       cmdclass = {"sdist":sdist_py2},
       zip_safe=False,
       entry_points = {
