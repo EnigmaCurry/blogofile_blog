@@ -1,0 +1,15 @@
+Next release
+============
+
+Bug Fixes
+---------
+
+
+
+Features
+--------
+
+- No longer dependent on a version of the argparse library bundled
+  with blogofle. argparse is included in the standard library for
+  Python 2.7 and 3.2+. setup.py will install it from PyPI for Python
+  2.6, 3.0, and 3.1.
