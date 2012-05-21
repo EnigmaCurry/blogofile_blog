@@ -22,8 +22,8 @@ import hashlib
 import codecs
 import base64
 import unicodedata
-from xml.sax import saxutils
 
+from markupsafe import Markup
 import pytz
 import yaml
 import logging
@@ -330,15 +330,17 @@ def create_guid(title, date):
     return base64.urlsafe_b64encode(hashlib.sha1(to_hash).digest())
 
 def create_slug(title):
-    #Get rid of any html entities
-    slug = saxutils.unescape(title)
-    if sys.version_info < (3,) and type(slug) != unicode:
-        #saxutils.unescape doesn't always return unicode in python2:
-        slug = unicode(slug,"utf-8")
-    #Try to convert non-ascii characters to their ascii equivalent:
-    slug = str(unicodedata.normalize("NFKD", slug).encode("ascii","ignore"),"utf-8")
-    #Replace any remaining non-valid URL characters
-    #(reference RFC 1738 section 2.2) with dashes:
+    # Get rid of any html entities
+    slug = Markup(title).unescape()
+    # Try to convert non-ascii characters to their ascii equivalent:
+    # HACK: Until we do a proper six-based 2 & 3 implementation...
+    #       The slug shouldn't be encoded here; that should be done
+    #       where it is output (unicode internally, encode/decode at edges)
+    str_func = unicode if sys.version_info < (3,) else str
+    slug = str_func(
+        unicodedata.normalize("NFKD", slug).encode("ascii", "ignore"), "utf-8")
+    # Replace any remaining non-valid URL characters with dashes
+    # (reference RFC 1738 section 2.2)
     slug = re.sub("[^a-zA-Z0-9$\-_\.+!*'(),]", "-", slug).lower()
     return slug
 
