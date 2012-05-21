@@ -10,13 +10,17 @@ import sys
 import datetime
 import re
 import operator
-import urllib.parse
+try:
+    from urllib.parse import quote as urllib_parse_quote
+except ImportError:
+    from urllib import quote as urllib_parse_quote
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 import hashlib
 import codecs
 import base64
-import urllib.request
-import urllib.parse
-import urllib.error
 import unicodedata
 from xml.sax import saxutils
 
@@ -183,7 +187,7 @@ class Post(object):
         if not self.categories or len(self.categories) == 0:
             self.categories = set([Category('uncategorized')])
         if self.guid:
-            uuid = urllib.parse.quote(self.guid) #used for expandling :uuid in permalink template code below
+            uuid = urllib_parse_quote(self.guid) #used for expandling :uuid in permalink template code below
         else:
             self.guid = uuid = create_guid(self.title, self.date)
         if not self.permalink and \
@@ -268,7 +272,7 @@ class Post(object):
         
     def permapath(self):
         """Get just the path portion of a permalink"""
-        return urllib.parse.urlparse(self.permalink)[2]
+        return urlparse(self.permalink)[2]
 
     def __cmp__(self, other_post):
         "Posts should be comparable by date"
