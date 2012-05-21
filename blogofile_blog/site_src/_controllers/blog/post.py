@@ -1,6 +1,7 @@
 """
 post.py parses post sources from the ./_post directory.
 """
+from __future__ import print_function
 
 __author__ = "Ryan McGuire (ryan@enigmacurry.com)"
 
