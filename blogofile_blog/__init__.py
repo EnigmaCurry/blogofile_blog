@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import urllib.parse
 import re
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 import blogofile
 import blogofile.plugin
 from blogofile.cache import bf, HierarchicalCache as HC

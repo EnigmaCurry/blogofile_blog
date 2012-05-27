@@ -1,92 +1,66 @@
-# If you're looking here for an example for creating your own
-# Blogofile plugins, there's a much simpler example here:
-# http://github.com/EnigmaCurry/blogofile_example_plugin
-# This setup.py is necessarily more complex because it has to support
-# both Python 3 and 2.
-
-from setuptools import setup, find_packages
-from distutils.command.sdist import sdist
-import sys
+# -*- coding: utf-8 -*-
 import os.path
-import imp
 import re
-import shutil
+import sys
+from setuptools import setup
+import blogofile_blog
 
-def setup_python2():
-    #Blogofile is written for Python 3.
-    #But we can also experimentally support Python 2 with lib3to2.
-    from lib3to2 import main as three2two
-    from distutils import dir_util
-    import shutil
-    import shlex
-    tmp_src = "src_py2"
-    try:
-        shutil.rmtree(tmp_src)
-    except OSError:
-        pass #ignore if the directory doesn't exist.
-    shutil.copytree("blogofile_blog",os.path.join(tmp_src,"blogofile_blog"))
-    three2two.main("lib3to2.fixes",shlex.split(
-            "-w {0}".format(tmp_src)))
-    return tmp_src
+
+py_version = sys.version_info[:2]
+PY3 = py_version[0] == 3
+if PY3:
+    if py_version < (3, 2):
+        raise RuntimeError(
+            'On Python 3, Blogofile requires Python 3.2 or better')
+else:
+    if py_version < (2, 7):
+        raise RuntimeError(
+            'On Python 2, Blogofile requires Python 2.7 or better')
+
+description = blogofile_blog.__dist__['pypi_description']
+with open('CHANGES.txt', 'rt') as changes:
+    long_description = description + '\n\n' + changes.read()
 
 dependencies = []
 
-if sys.version_info < (3,):
-    sys.path.insert(0,"src_py2")
-    src_root = os.path.join("src_py2","blogofile_blog")
-    import blogofile_blog
-    try:
-        import blogofile_blog
-    except ImportError:
-        print("-"*80)
-        print("Python 3.x is required to develop and build Blogofile.")
-        print("Python 2.x versions of Blogofile can be installed with "
-              "a stable tarball\nfrom PyPI. e.g. 'easy_install blogofile_blog'\n")
-        print("Alternatively, you can build your own tarball with "
-              "'python3 setup.py sdist'.")
-        print("This will require Python 3 and 3to2, and will produce a tarball "
-              "that can be\ninstalled in either Python 2 or 3.")
-        print("-"*80)
-        sys.exit(1)
-    if sys.version_info < (2, 7):
-        dependencies.append("argparse")
-else:
-    src_root = "blogofile_blog"
-    import blogofile_blog
 
-class sdist_py2(sdist):
-    "sdist for python2 which runs 3to2 over the source before packaging"
-    def run(self):
-        setup_python2()
-        sdist.run(self)
-        shutil.rmtree("src_py2")
-        
 def find_package_data(module, path):
-    """Find all data files to include in the package"""
+    """Find all data files to include in the package.
+    """
     files = []
     exclude = re.compile("\.pyc$|~$")
-    for dirpath, dirnames, filenames in os.walk(os.path.join(module,path)):
+    for dirpath, dirnames, filenames in os.walk(os.path.join(module, path)):
         for filename in filenames:
             if not exclude.search(filename):
-                files.append(os.path.relpath(os.path.join(dirpath,filename),module))
-    return {module:files}
+                files.append(
+                    os.path.relpath(os.path.join(dirpath, filename), module))
+    return {module: files}
 
-os.chdir(os.path.split(os.path.abspath(__file__))[0])
+classifiers = [
+    'Programming Language :: Python :: {0}'.format(py_version)
+    for py_version in ['2', '2.7', '3', '3.2']]
+classifiers.extend([
+    'Development Status :: 4 - Beta',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Environment :: Console',
+    'Natural Language ::  English',
+])
 
-setup(name="blogofile_blog",
-      description=blogofile_blog.__dist__['pypi_description'],
-      version=blogofile_blog.__version__,
-      author=blogofile_blog.__dist__["author"],
-      url=blogofile_blog.__dist__["url"],
-      packages=["blogofile_blog"],
-      package_dir = {"blogofile_blog": src_root},
-      package_data = find_package_data("blogofile_blog","site_src"),
-      include_package_data = True,
-      install_requires = dependencies,
-      cmdclass = {"sdist":sdist_py2},
-      zip_safe=False,
-      entry_points = {
-        "blogofile.plugins":
-            ["blogofile_blog = blogofile_blog"]
-        }
-      )
+setup(
+    name="blogofile_blog",
+    version=blogofile_blog.__version__,
+    description=blogofile_blog.__dist__['pypi_description'],
+    long_description=long_description,
+    author=blogofile_blog.__dist__["author"],
+    author_email="blogofile-discuss@googlegroups.com",
+    url=blogofile_blog.__dist__["url"],
+    license="MIT",
+    classifiers=classifiers,
+    packages=["blogofile_blog"],
+    package_data=find_package_data("blogofile_blog", "site_src"),
+    include_package_data=True,
+    install_requires=dependencies,
+    entry_points={
+        "blogofile.plugins": ["blogofile_blog = blogofile_blog"]},
+)

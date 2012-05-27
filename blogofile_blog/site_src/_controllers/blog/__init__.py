@@ -1,6 +1,9 @@
 import os
 import logging
-import urllib.parse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 from mako.lookup import TemplateLookup
 
 from blogofile.cache import bf
