@@ -8,20 +8,21 @@ import blogofile_blog
 
 py_version = sys.version_info[:2]
 PY3 = py_version[0] == 3
+PY26 = py_version == (2, 6)
 if PY3:
     if py_version < (3, 2):
         raise RuntimeError(
             'On Python 3, Blogofile requires Python 3.2 or better')
 else:
-    if py_version < (2, 7):
+    if py_version < (2, 6):
         raise RuntimeError(
-            'On Python 2, Blogofile requires Python 2.7 or better')
+            'On Python 2, Blogofile requires Python 2.6 or better')
 
 description = blogofile_blog.__dist__['pypi_description']
 with open('CHANGES.txt', 'rt') as changes:
     long_description = description + '\n\n' + changes.read()
 
-dependencies = []
+dependencies = ['argparse'] if PY26 else []
 
 
 def find_package_data(module, path):
@@ -38,7 +39,7 @@ def find_package_data(module, path):
 
 classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
-    for py_version in ['2', '2.7', '3', '3.2']]
+    for py_version in ['2', '2.6', '2.7', '3', '3.2']]
 classifiers.extend([
     'Development Status :: 4 - Beta',
     'License :: OSI Approved :: MIT License',

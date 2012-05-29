@@ -1,9 +1,7 @@
+include README.rst
 include CHANGES.txt
-recursive-include blogofile_blog *.py
 recursive-include blogofile_blog/site_src *
-recursive-include src_py2/blogofile_blog *.py
-recursive-include src_py2/blogofile_blog/site_src *
-recursive-exclude blogofile_blog *.pyc *.bak
-recursive-exclude src_py2 *.pyc *.bak __pycache__
+recursive-exclude blogofile_blog/site_src *.pyc *.bak
+
 
 
