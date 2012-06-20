@@ -4,13 +4,16 @@ Next release
 Bug Fixes
 ---------
 
+- Fix Python 2 handling of utf-8 encoded content in posts.
+  See https://github.com/EnigmaCurry/blogofile_blog/pull/10.
+
 - Fix disabling of Disqus comments on permalink page.
   See https://github.com/EnigmaCurry/blogofile_blog/pull/9.
 
 Features
 --------
 
-- The codebase has been unified for Python 2.7 and 3.2 (no 2to3 or
+- The codebase has been unified for Python 2.6, 2.7 and 3.2 (no 2to3 or
   3to2 conversion required).
 
 - No longer dependent on a version of the argparse library bundled

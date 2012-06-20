@@ -27,6 +27,7 @@ from markupsafe import Markup
 import pytz
 import yaml
 import logging
+import six
 
 from blogofile import util
 import blogofile_bf as bf
@@ -401,6 +402,8 @@ def parse_posts(directory):
         try:
             with open(post_path, "r") as src_file:
                 src = src_file.read()
+            if not isinstance(src, six.text_type):
+                src = src.decode('utf-8')
         except:
             logger.exception("Error reading post: {0}".format(post_path))
             raise
