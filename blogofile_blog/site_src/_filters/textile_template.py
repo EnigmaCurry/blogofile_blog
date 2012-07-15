@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import textile
 
 from blogofile.cache import HierarchicalCache as HC

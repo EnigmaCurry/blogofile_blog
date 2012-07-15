@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 post.py parses post sources from the ./_post directory.
 """

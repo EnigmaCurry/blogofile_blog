@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import docutils.core
 
 from blogofile.cache import HierarchicalCache as HC

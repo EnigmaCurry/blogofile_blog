@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Write all the blog posts in reverse chronological order
 import os
 from blogofile.cache import bf
