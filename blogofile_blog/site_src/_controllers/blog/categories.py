@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import shutil
 import operator
 from blogofile.cache import bf
@@ -7,8 +6,10 @@ from blogofile.cache import bf
 from . import blog, tools
 from . import feed
 
+
 def run():
     write_categories()
+
 
 def sort_into_categories():
     categories = set()
@@ -22,8 +23,10 @@ def sort_into_categories():
         list(blog.categorized_posts.items()), key=operator.itemgetter(0)):
         blog.all_categories.append((category, len(posts)))
 
+
 def write_categories():
-    """Write all the blog posts in categories"""
+    """Write all the blog posts in categories.
+    """
     root = bf.util.path_join(blog.path, blog.category_dir)
     #Find all the categories:
     categories = set()
@@ -34,7 +37,7 @@ def write_categories():
         rss_path = bf.util.fs_site_path_helper(
             blog.path, blog.category_dir,
             category.url_name, "feed")
-        feed.write_feed(category_posts,rss_path, "rss.mako")
+        feed.write_feed(category_posts, rss_path, "rss.mako")
         atom_path = bf.util.fs_site_path_helper(
             blog.path, blog.category_dir,
             category.url_name, "feed", "atom")
@@ -58,7 +61,6 @@ def write_categories():
                                            str(page_num + 1))
             else:
                 next_link = None
-            
             env = {
                 "category": category,
                 "posts": page_posts,
@@ -66,7 +68,6 @@ def write_categories():
                 "next_link": next_link
             }
             tools.materialize_template("chronological.mako", path, env)
-            
             #Copy category/1 to category/index.html
             if page_num == 1:
                 shutil.copyfile(

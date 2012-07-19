@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
-# Write all the blog posts in reverse chronological order
-import os
+"""Write all the blog posts in reverse chronological order.
+"""
 from blogofile.cache import bf
-from . import blog
-from . import tools
+from . import (
+    blog,
+    tools,
+)
+
 
 def run():
     posts = list(blog.iter_posts_published())
     write_blog_chron(posts=posts, root=blog.pagination_dir.lstrip("/"))
     write_blog_first_page(posts)
 
+
 def write_blog_chron(posts, root):
+    """Write the pages, num_per_page posts per page.
+    """
     page_num = 1
     post_num = 0
-    html = []
     while len(posts) > post_num:
-        #Write the pages, num_per_page posts per page:
         page_posts = posts[post_num:post_num + blog.posts_per_page]
         post_num += blog.posts_per_page
         if page_num > 1:
@@ -36,6 +40,7 @@ def write_blog_chron(posts, root):
         tools.materialize_template("chronological.mako", fn, env)
         page_num += 1
 
+
 def write_blog_first_page(posts):
     if not blog.custom_index:
         page_posts = posts[:blog.posts_per_page]
@@ -43,7 +48,7 @@ def write_blog_first_page(posts):
         blog.logger.info("Writing blog index page: " + path)
         if len(blog.posts) > blog.posts_per_page:
             next_link = bf.util.site_path_helper(
-                    blog.path, blog.pagination_dir+"/2")
+                    blog.path, blog.pagination_dir + "/2")
         else:
             next_link = None
         env = {
