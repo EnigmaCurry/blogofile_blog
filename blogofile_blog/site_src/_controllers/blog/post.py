@@ -15,6 +15,10 @@ import re
 import sys
 import unicodedata
 try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
+try:
     from urllib.parse import quote as urllib_parse_quote
 except ImportError:
     from urllib import quote as urllib_parse_quote
@@ -221,8 +225,7 @@ class Post(object):
         try:
             self.permalink = y['permalink']
             if self.permalink.startswith("/"):
-                self.permalink = urllib.parse.urljoin(bf.config.site.url,
-                        self.permalink)
+                self.permalink = urljoin(bf.config.site.url, self.permalink)
             # Ensure that the permalink is for the same site as
             # bf.config.site.url
             if not self.permalink.startswith(bf.config.site.url):
