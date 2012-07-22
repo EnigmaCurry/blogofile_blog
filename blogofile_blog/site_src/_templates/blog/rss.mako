@@ -23,7 +23,7 @@
       <category><![CDATA[${category}]]></category>
 % endfor
 % if post.guid:
-      <guid>${post.guid}</guid>
+      <guid isPermaLink="false">${post.guid}</guid>
 % else:
       <guid isPermaLink="true">${post.permalink}</guid>
 % endif
