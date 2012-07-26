@@ -31,6 +31,7 @@ import pytz
 import six
 import yaml
 from blogofile import util
+from blogofile.util import create_slug
 # TODO: Why not `blogofile.cache import bf`
 import blogofile_bf as bf
 from . import config as blog_config
@@ -175,22 +176,15 @@ class Post(object):
             self.date = datetime.datetime.now(pytz.timezone(self.__timezone))
         if not self.updated:
             self.updated = self.date
-
         #Make sure dates have timezone info:
         if not self.date.tzinfo:
             pytz.timezone(self.__timezone).localize(self.date)
         if not self.updated.tzinfo:
             pytz.timezone(self.__timezone).localize(self.updated)
-
         if not self.title:
             self.title = "Untitled - {0}".format(self.date)
         if not self.slug:
-            if config.slugify:
-                #The use has provided their own slugify function, use that:
-                self.slug = config.slugify(self)
-            else:
-                self.slug = create_slug(self.title)
-
+            self.slug = create_slug(self.title)
         if not self.categories or len(self.categories) == 0:
             self.categories = set([Category('uncategorized')])
         if self.guid:
@@ -203,7 +197,6 @@ class Post(object):
             self.permalink = create_permalink(
                 blog_config.auto_permalink.path, bf.config.site.url,
                 blog_config.path, self.title, self.date, uuid, self.filename)
-
         logger.debug("Permalink: {0}".format(self.permalink))
 
     def __parse_yaml(self, yaml_src):
@@ -301,9 +294,8 @@ class Post(object):
 class Category(object):
     def __init__(self, name):
         self.name = str(name)
-        # TODO: slugification should be abstracted out somewhere reusable
         # TODO: consider making url_name and path read-only properties?
-        self.url_name = self.name.lower().replace(" ", "-")
+        self.url_name = create_slug(self.name)
         self.path = bf.util.site_path_helper(
                 blog_config.path,
                 blog_config.category_dir,
@@ -344,22 +336,6 @@ def create_guid(title, date):
     else:
         to_hash = eval("date.isoformat() + title.encode(\"utf-8\")")
     return base64.urlsafe_b64encode(hashlib.sha1(to_hash).digest())
-
-
-def create_slug(title):
-    # Get rid of any html entities
-    slug = Markup(title).unescape()
-    # Try to convert non-ascii characters to their ascii equivalent:
-    # HACK: Until we do a proper six-based 2 & 3 implementation...
-    #       The slug shouldn't be encoded here; that should be done
-    #       where it is output (unicode internally, encode/decode at edges)
-    str_func = unicode if sys.version_info < (3,) else str
-    slug = str_func(
-        unicodedata.normalize("NFKD", slug).encode("ascii", "ignore"), "utf-8")
-    # Replace any remaining non-valid URL characters with dashes
-    # (reference RFC 1738 section 2.2)
-    slug = re.sub("[^a-zA-Z0-9$\-_\.+!*'(),]", "-", slug).lower()
-    return slug
 
 
 def create_permalink(auto_permalink_path, site_url,
