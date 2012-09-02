@@ -62,6 +62,7 @@ setup(
     package_data=find_package_data("blogofile_blog", "site_src"),
     include_package_data=True,
     install_requires=dependencies,
+    zip_safe=False,
     entry_points={
         "blogofile.plugins": ["blogofile_blog = blogofile_blog"]},
 )
