@@ -2,9 +2,9 @@
 import os
 import logging
 try:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse   # For Python 2
 except ImportError:
-    from urlparse import urlparse
+    from urlparse import urlparse       # For Python 3; flake8 ignore # NOQA
 from blogofile.cache import bf
 from blogofile.cache import HierarchicalCache as HC
 import blogofile_blog
@@ -35,7 +35,7 @@ def iter_posts(conditional, limit=None):
 def iter_posts_published(limit=None):
     """Iterate over all the posts to be published"""
     def is_publishable(post):
-        if post.draft == False and post.permalink != None:
+        if post.draft is False and post.permalink is not None:
             return True
     return iter_posts(is_publishable, limit)
 
