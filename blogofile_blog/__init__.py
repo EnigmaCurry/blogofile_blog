@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
 try:
     from urllib.parse import urlparse   # For Python 2
 except ImportError:
@@ -147,7 +148,7 @@ config = HC(
         )
     )
 
-tools = blogofile.plugin.PluginTools(__name__)
+tools = blogofile.plugin.PluginTools(sys.modules[__name__])
 
 
 def init():
