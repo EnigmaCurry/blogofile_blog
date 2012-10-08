@@ -22,9 +22,9 @@ __dist__ = dict(
     #referenced as bf.config.plugins.name
     config_name="blog",
     #Your name:
-    author="Ryan McGuire",
+    author="Ryan McGuire, Doug Latornell, and the Blogofile Contributors",
     #The version number:
-    version="0.8",
+    version="0.8b1",
     #The URL for the plugin (where to download, documentation etc):
     url="http://www.blogofile.com",
     #A one line description of your plugin presented to other Blogofile users:

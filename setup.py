@@ -19,10 +19,14 @@ else:
             'On Python 2, Blogofile requires Python 2.6 or better')
 
 description = blogofile_blog.__dist__['pypi_description']
+with open('README.rst', 'rt') as readme:
+    long_description = readme.read()
 with open('CHANGES.txt', 'rt') as changes:
-    long_description = description + '\n\n' + changes.read()
+    long_description += '\n\n' + changes.read()
 
-dependencies = ['argparse'] if PY26 else []
+dependencies = ['Blogofile']
+if PY26:
+    dependencies.append('argparse')
 
 
 def find_package_data(module, path):
@@ -45,7 +49,7 @@ classifiers.extend([
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: Implementation :: CPython',
     'Environment :: Console',
-    'Natural Language ::  English',
+    'Natural Language :: English',
 ])
 
 setup(
