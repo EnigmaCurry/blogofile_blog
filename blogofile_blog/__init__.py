@@ -4,7 +4,7 @@ import sys
 try:
     from urllib.parse import urlparse   # For Python 2
 except ImportError:
-    from urlparse import urlparse       # For Python 3; flake8 ignore # NOQA
+    from urlparse import urlparse       # For Python 2; flake8 ignore # NOQA
 import blogofile
 import blogofile.plugin
 from blogofile.cache import (
