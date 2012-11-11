@@ -13,20 +13,18 @@ import operator
 import os
 import re
 import sys
-import unicodedata
 try:
-    from urllib.parse import urljoin
+    from urllib.parse import urljoin    # Python 3
 except ImportError:
-    from urlparse import urljoin
+    from urlparse import urljoin        # Python 2
 try:
-    from urllib.parse import quote as urllib_parse_quote
+    from urllib.parse import quote as urllib_parse_quote  # Python 3
 except ImportError:
-    from urllib import quote as urllib_parse_quote
+    from urllib import quote as urllib_parse_quote        # Python 2
 try:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse    # Python 3
 except ImportError:
-    from urlparse import urlparse
-from markupsafe import Markup
+    from urlparse import urlparse        # Python 2
 import pytz
 import six
 import yaml
@@ -437,7 +435,8 @@ def create_post_template(title, **params):
         params['permalink'] = create_permalink(
             blog_config.auto_permalink.path, bf.config.site.url,
             blog_config.path, **params)
-    params['date'] = date.strftime("%Y/%m/%d %H:%M:%S")
+    # params['date'] = date.strftime("%Y/%m/%d %H:%M:%S")
+    params['date'] = date.strftime(config.date_format)
     params['categories'] = ""
     template = """---
 title: {title}
