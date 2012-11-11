@@ -435,7 +435,6 @@ def create_post_template(title, **params):
         params['permalink'] = create_permalink(
             blog_config.auto_permalink.path, bf.config.site.url,
             blog_config.path, **params)
-    # params['date'] = date.strftime("%Y/%m/%d %H:%M:%S")
     params['date'] = date.strftime(config.date_format)
     params['categories'] = ""
     template = """---
