@@ -169,11 +169,6 @@ class Post(object):
         return " ".join(post_words[:num_words])
 
     def __post_process(self):
-        # fill in empty default value
-        if not self.date:
-            self.date = datetime.now(pytz.timezone(self.__timezone))
-        if not self.updated:
-            self.updated = self.date
         #Make sure dates have timezone info:
         if not self.date.tzinfo:
             pytz.timezone(self.__timezone).localize(self.date)
@@ -232,25 +227,30 @@ class Post(object):
         try:
             self.date = y['date']
         except KeyError:
-            pass
+            self.date = datetime.now()
         else:
             try:
                 self.date = datetime.strptime(self.date, config.date_format)
             except TypeError:
                 pass
+        finally:
             self.date = pytz.timezone(self.__timezone).localize(self.date)
         try:
             self.updated = y['updated']
         except KeyError:
-            pass
+            self.updated = self.date
         else:
             try:
                 self.updated = datetime.strptime(
                     self.updated, config.date_format)
             except TypeError:
                 pass
-            self.updated = pytz.timezone(self.__timezone).localize(
-                self.updated)
+        finally:
+            try:
+                self.updated = pytz.timezone(self.__timezone).localize(
+                    self.updated)
+            except ValueError:
+                pass
         try:
             if config.categories.case_sensitive:
                 self.categories = set([Category(x.strip()) for x in \

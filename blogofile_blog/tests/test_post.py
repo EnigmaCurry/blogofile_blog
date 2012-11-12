@@ -51,6 +51,23 @@ class TestPost(unittest.TestCase):
     def _make_one(self, *args, **kwargs):
         return self._get_target_class()(*args, **kwargs)
 
+    def test_parse_yaml_sets_default_date_if_missing(self):
+        """header date set to datetime.now if it is missing
+        """
+        from blog import post
+        from blog.post import blog_config
+        post_content = (
+            '---\n'
+            'title: Test Post\n'
+            '---\n'
+            )
+        with patch.object(post, 'datetime') as mock_dt:
+            mock_dt.now.return_value = datetime(2012, 11, 12, 10, 51, 42)
+            post = self._make_one(post_content)
+        expected = pytz.timezone(blog_config.timezone).localize(
+            datetime(2012, 11, 12, 10, 51, 42))
+        self.assertEqual(post.date, expected)
+
     def test_parse_yaml_date_w_date_format(self):
         """header date is converted from string using post.config.date_format
         """
@@ -84,6 +101,18 @@ class TestPost(unittest.TestCase):
         expected = pytz.timezone(blog_config.timezone).localize(
             datetime(2012, 11, 11, 19, 33, 42))
         self.assertEqual(post.date, expected)
+
+    def test_parse_yaml_sets_default_updated_if_missing(self):
+        """header updated set to header date if it is missing
+        """
+        post_content = (
+            '---\n'
+            'title: Test Post\n'
+            'date: 2012/11/12 11:05:42\n'
+            '---\n'
+            )
+        post = self._make_one(post_content)
+        self.assertEqual(post.updated, post.date)
 
     def test_parse_yaml_updated_w_date_format(self):
         """header updated is converted from string w/ post.config.date_format
