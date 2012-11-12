@@ -169,11 +169,6 @@ class Post(object):
         return " ".join(post_words[:num_words])
 
     def __post_process(self):
-        #Make sure dates have timezone info:
-        if not self.date.tzinfo:
-            pytz.timezone(self.__timezone).localize(self.date)
-        if not self.updated.tzinfo:
-            pytz.timezone(self.__timezone).localize(self.updated)
         if not self.title:
             self.title = "Untitled - {0}".format(self.date)
         if not self.slug:
