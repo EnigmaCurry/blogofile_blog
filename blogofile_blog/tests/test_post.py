@@ -32,7 +32,7 @@ class TestCreatePostTemplate(unittest.TestCase):
         with patch.object(post, 'open', mo, create=True):
             mock_file = six.StringIO()
             mo().__enter__.return_value = mock_file
-            with patch.object(post.datetime, 'datetime') as mock_dt:
+            with patch.object(post, 'datetime') as mock_dt:
                 mock_dt.now.return_value = datetime(2012, 11, 11, 8, 6, 42)
                 self.addCleanup(
                     setattr, post.config, 'date_format',

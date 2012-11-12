@@ -6,7 +6,7 @@ from __future__ import print_function
 __author__ = "Ryan McGuire (ryan@enigmacurry.com)"
 
 import base64
-import datetime
+from datetime import datetime
 import hashlib
 import logging
 import operator
@@ -171,7 +171,7 @@ class Post(object):
     def __post_process(self):
         # fill in empty default value
         if not self.date:
-            self.date = datetime.datetime.now(pytz.timezone(self.__timezone))
+            self.date = datetime.now(pytz.timezone(self.__timezone))
         if not self.updated:
             self.updated = self.date
         #Make sure dates have timezone info:
@@ -235,8 +235,7 @@ class Post(object):
             pass
         else:
             try:
-                self.date = datetime.datetime.strptime(
-                    self.date, config.date_format)
+                self.date = datetime.strptime(self.date, config.date_format)
             except TypeError:
                 pass
             self.date = pytz.timezone(self.__timezone).localize(self.date)
@@ -246,7 +245,7 @@ class Post(object):
             pass
         else:
             try:
-                self.updated = datetime.datetime.strptime(
+                self.updated = datetime.strptime(
                     self.updated, config.date_format)
             except TypeError:
                 pass
@@ -355,7 +354,7 @@ def create_permalink(auto_permalink_path, site_url,
     >>> d = {"site_url" : "http://www.example.com",\
          "blog_path" : "/blog",\
          "title" : "Test Title",\
-         "date" : datetime.datetime(2011, 2, 28),\
+         "date" : datetime(2011, 2, 28),\
          "uuid" : "123456789-aaaa-12345",\
          "filename" : "001-post-one.markdown" }
     >>> create_permalink(":blog_path/:year/:month/:title",**d)
@@ -439,7 +438,7 @@ def create_post_template(title, **params):
     if "date" in params:
         date = params['date']
     else:
-        date = params['date'] = datetime.datetime.now()
+        date = params['date'] = datetime.now()
     if "uuid" not in params:
         params['uuid'] = create_guid(title, date)
     if "filename" not in params:
