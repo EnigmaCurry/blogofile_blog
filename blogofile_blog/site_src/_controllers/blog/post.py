@@ -230,15 +230,28 @@ class Post(object):
         except KeyError:
             self.guid = self.permalink
         try:
-            self.date = pytz.timezone(self.__timezone).localize(
-                datetime.datetime.strptime(y['date'], config.date_format))
+            self.date = y['date']
         except KeyError:
             pass
+        else:
+            try:
+                self.date = datetime.datetime.strptime(
+                    self.date, config.date_format)
+            except TypeError:
+                pass
+            self.date = pytz.timezone(self.__timezone).localize(self.date)
         try:
-            self.updated = pytz.timezone(self.__timezone).localize(
-                datetime.datetime.strptime(y['updated'], config.date_format))
+            self.updated = y['updated']
         except KeyError:
             pass
+        else:
+            try:
+                self.updated = datetime.datetime.strptime(
+                    self.updated, config.date_format)
+            except TypeError:
+                pass
+            self.updated = pytz.timezone(self.__timezone).localize(
+                self.updated)
         try:
             if config.categories.case_sensitive:
                 self.categories = set([Category(x.strip()) for x in \

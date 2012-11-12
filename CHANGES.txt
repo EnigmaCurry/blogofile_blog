@@ -1,3 +1,14 @@
+Next Release
+============
+
+- Fix handling of post header ``date`` and ``updated`` fields that are
+  converted to ``datetime`` objects by the YAML parser.
+  See https://github.com/EnigmaCurry/blogofile_blog/pull/1
+
+- Use ``config.blog.post.date_format`` in post file header creation
+  as well as in post file processing.
+
+
 0.8b1
 =====
 
