@@ -279,7 +279,7 @@ class Post(object):
 
     def permapath(self):
         """Get just the path portion of a permalink"""
-        return urlparse(self.permalink)[2]
+        return urlparse(self.permalink)[2] + "/"
 
     def __cmp__(self, other_post):
         "Posts should be comparable by date"
@@ -304,7 +304,8 @@ class Category(object):
         self.path = bf.util.site_path_helper(
                 blog_config.path,
                 blog_config.category_dir,
-                self.url_name)
+                self.url_name,
+                trailing_slash=True)
 
     def __hash__(self):
         return hash(self.name)
