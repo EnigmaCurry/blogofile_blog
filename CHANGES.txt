@@ -1,6 +1,13 @@
 Next Release
 ============
 
+- Improved readability of default ``header.mako`` template,
+  and fixed highlighting of site sections in header bar so that "Blog"
+  remains highlighted for all posts.
+
+- Changed URLs to end with a / to avoid spurious 301 responses.
+  See https://github.com/EnigmaCurry/blogofile_blog/issues/5
+
 - Fix handling of post header ``date`` and ``updated`` fields that are
   converted to ``datetime`` objects by the YAML parser.
   See https://github.com/EnigmaCurry/blogofile_blog/pull/1
