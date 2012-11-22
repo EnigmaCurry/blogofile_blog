@@ -24,7 +24,10 @@ with open('README.rst', 'rt') as readme:
 with open('CHANGES.txt', 'rt') as changes:
     long_description += '\n\n' + changes.read()
 
-dependencies = ['Blogofile']
+dependencies = [
+    'Blogofile',
+    'six',
+    ]
 if PY26:
     dependencies.append('argparse')
 

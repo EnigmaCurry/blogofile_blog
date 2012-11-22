@@ -1,6 +1,10 @@
 Next Release
 ============
 
+- Allow multiple user template directories.
+  See https://github.com/EnigmaCurry/blogofile_blog/issues/13
+  and https://github.com/orki/blogofile_blog/commit/9ab46d4
+
 - Improved readability of default ``header.mako`` template,
   and fixed highlighting of site sections in header bar so that "Blog"
   remains highlighted for all posts.

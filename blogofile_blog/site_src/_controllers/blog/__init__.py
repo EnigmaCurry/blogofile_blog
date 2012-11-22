@@ -5,6 +5,7 @@ try:
     from urllib.parse import urlparse   # For Python 2
 except ImportError:
     from urlparse import urlparse       # For Python 3; flake8 ignore # NOQA
+import six
 from blogofile.cache import bf
 from blogofile.cache import HierarchicalCache as HC
 import blogofile_blog
@@ -43,8 +44,13 @@ def iter_posts_published(limit=None):
 def init():
     config["url"] = bf.config.site.url + config["path"]
     if config.template_path:
-        #Add the user's custom template path first
-        tools.add_template_dir(config.template_path, append=False)
+        #Add the user's custom template paths first
+        if isinstance(config.template_path, six.string_types):
+            template_paths = [config.template_path]
+        else:
+            template_paths = config.template_path
+        for tp in template_paths:
+            tools.add_template_dir(tp, append=False)
     tools.add_template_dir(
         os.path.join(tools.get_src_dir(), "_templates/blog"))
 
