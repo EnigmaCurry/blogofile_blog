@@ -5,10 +5,11 @@ import os
 
 import pygments
 from pygments import formatters, util, lexers
+import six
 from blogofile.cache import HierarchicalCache as HC
 import blogofile_bf as bf
 
-#Example usage:    
+#Example usage:
 """
 
 This is normal text.
@@ -42,13 +43,13 @@ class Person
     "#@name (#@age)"
   end
 end
- 
+
 group = [
-  Person.new("Bob", 33), 
-  Person.new("Chris", 16), 
-  Person.new("Ash", 23) 
+  Person.new("Bob", 33),
+  Person.new("Chris", 16),
+  Person.new("Ash", 23)
 ]
- 
+
 puts group.sort.reverse
 $$/code
 
@@ -72,7 +73,7 @@ def init():
         formatter = pygments.formatters.HtmlFormatter(
             linenos=False, cssclass=css_class, style=style)
         write_pygments_css(style, formatter)
-    
+
 
 css_files_written = set()
 
@@ -108,7 +109,7 @@ def highlight_code(code, language, formatter):
     #But get rid of the last <br> which throws off line numbers:
     highlighted = "</pre></div>".join(highlighted.rsplit("</pre></div><br/>"))
     #Surround the text with newlines so markdown etc parse properly:
-    highlighted = "\n\n{0}\n\n".format(highlighted)
+    highlighted = six.u("\n\n{0}\n\n").format(highlighted)
     return highlighted
 
 def parse_args(args):
