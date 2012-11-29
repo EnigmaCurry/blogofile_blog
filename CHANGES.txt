@@ -3,6 +3,7 @@ Next Release
 
 - Add ``md`` as a synonym for ``markdown`` to the default filters
   file extension list.
+  See https://github.com/EnigmaCurry/blogofile_blog/issues/21
 
 - Fix handling of Unicode in Markdown syntax highlighting filter.
   See https://github.com/EnigmaCurry/blogofile_blog/issues/20
