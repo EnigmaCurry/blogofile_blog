@@ -1,6 +1,12 @@
 Next Release
 ============
 
+- Add ``md`` as a synonym for ``markdown`` to the default filters
+  file extension list.
+
+- Fix handling of Unicode in Markdown syntax highlighting filter.
+  See https://github.com/EnigmaCurry/blogofile_blog/issues/20
+
 - Allow multiple user template directories.
   See https://github.com/EnigmaCurry/blogofile_blog/issues/13
   and https://github.com/orki/blogofile_blog/commit/9ab46d4

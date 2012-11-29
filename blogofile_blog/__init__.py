@@ -130,6 +130,7 @@ config = HC(
         # following defaults based on the post file extension:
         default_filters={
            "markdown": "syntax_highlight, markdown",
+           "md": "syntax_highlight, markdown",
            "textile": "syntax_highlight, textile",
            "org": "syntax_highlight, org",
            "rst": "syntax_highlight, rst",
