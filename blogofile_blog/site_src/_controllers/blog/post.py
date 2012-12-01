@@ -347,24 +347,15 @@ def create_guid(title, date):
 def create_permalink(auto_permalink_path, site_url,
                      blog_path, title, date, uuid, filename):
     permalink = site_url.rstrip("/") + auto_permalink_path
-    permalink = \
-        re.sub(":blog_path", blog_path, permalink)
-    permalink = \
-        re.sub(":year", date.strftime("%Y"), permalink)
-    permalink = \
-        re.sub(":month", date.strftime("%m"), permalink)
-    permalink = \
-        re.sub(":day", date.strftime("%d"), permalink)
-    permalink = \
-        re.sub(":hour", date.strftime("%H"), permalink)
-    permalink = \
-        re.sub(":minute", date.strftime("%M"), permalink)
-    permalink = \
-        re.sub(":second", date.strftime("%S"), permalink)
-    permalink = \
-        re.sub(":title", create_slug(title), permalink)
-    permalink = \
-        re.sub(":filename", create_slug(filename), permalink)
+    permalink = re.sub(":blog_path", blog_path, permalink)
+    permalink = re.sub(":year", date.strftime("%Y"), permalink)
+    permalink = re.sub(":month", date.strftime("%m"), permalink)
+    permalink = re.sub(":day", date.strftime("%d"), permalink)
+    permalink = re.sub(":hour", date.strftime("%H"), permalink)
+    permalink = re.sub(":minute", date.strftime("%M"), permalink)
+    permalink = re.sub(":second", date.strftime("%S"), permalink)
+    permalink = re.sub(":title", create_slug(title), permalink)
+    permalink = re.sub(":filename", create_slug(filename), permalink)
     permalink = re.sub(":uuid", uuid, permalink)
     return permalink
 
