@@ -346,18 +346,6 @@ def create_guid(title, date):
 
 def create_permalink(auto_permalink_path, site_url,
                      blog_path, title, date, uuid, filename):
-    """
-    >>> d = {"site_url" : "http://www.example.com",\
-         "blog_path" : "/blog",\
-         "title" : "Test Title",\
-         "date" : datetime(2011, 2, 28),\
-         "uuid" : "123456789-aaaa-12345",\
-         "filename" : "001-post-one.markdown" }
-    >>> create_permalink(":blog_path/:year/:month/:title",**d)
-    'http://www.example.com/blog/2011/02/test-title'
-    >>> create_permalink("/:uuid/fuzz/:filename",**d)
-    'http://www.example.com/123456789-aaaa-12345/fuzz/001-post-one.markdown'
-    """
     permalink = site_url.rstrip("/") + auto_permalink_path
     permalink = \
         re.sub(":blog_path", blog_path, permalink)

@@ -14,6 +14,49 @@ import pytz
 import six
 
 
+class TestCreatePermalink(unittest.TestCase):
+    """Unit tests for create_permalink function."""
+    def _get_fut(self):
+        from blog.post import create_permalink
+        return create_permalink
+
+    def _call_fut(self, *args, **kwargs):
+        return self._get_fut()(*args, **kwargs)
+
+    def test_create_permalink_year_month_title(self):
+        """create_permalink has expected result for :year/:month/:title
+        """
+        kwargs = {
+            'site_url': 'http://www.example.com',
+            'blog_path': '/blog',
+            'title': 'Test Title',
+            'date': datetime(2012, 12, 1),
+            'uuid': '123456789-aaaa-12345',
+            'filename': '001-post-one.markdown',
+            }
+        permalink = self._call_fut(':blog_path/:year/:month/:title', **kwargs)
+        self.assertEqual(
+            permalink,
+            'http://www.example.com/blog/2012/12/test-title')
+
+    def test_create_permalink_uuid_str_filename(self):
+        """create_permalink has expected result for :uuid/fuxx/:filename
+        """
+        kwargs = {
+            'site_url': 'http://www.example.com',
+            'blog_path': '/blog',
+            'title': 'Test Title',
+            'date': datetime(2012, 12, 1),
+            'uuid': '123456789-aaaa-12345',
+            'filename': '001-post-one.markdown',
+            }
+        permalink = self._call_fut('/:uuid/fuzz/:filename', **kwargs)
+        self.assertEqual(
+            permalink,
+            'http://www.example.com/123456789-aaaa-12345/fuzz/'
+            '001-post-one-markdown')
+
+
 class TestCreatePostTemplate(unittest.TestCase):
     """Unit tests for create_post_template function."""
     def _get_fut(self):
