@@ -14,6 +14,27 @@ import pytz
 import six
 
 
+class TestCreateGuid(unittest.TestCase):
+    """Unit tests for create_guid function."""
+    def _get_fut(self):
+        from blog.post import create_guid
+        return create_guid
+
+    def _call_fut(self, *args, **kwargs):
+        return self._get_fut()(*args, **kwargs)
+
+    def test_create_guid(self):
+        """create_guid returns expected string
+        """
+        guid = self._call_fut(six.u('Je suis arrivé'), datetime(2012, 12, 1))
+        try:
+            # Python 3 result
+            self.assertEqual(guid, six.u('84mH0fap8NAz8GuFxu7aBXNn4pw='))
+        except AssertionError:
+            # Python 2 result
+            self.assertEqual(guid, six.u('sCCVan827mZtY6wRvRKGJ9x1L44='))
+
+
 class TestCreatePermalink(unittest.TestCase):
     """Unit tests for create_permalink function."""
     def _get_fut(self):

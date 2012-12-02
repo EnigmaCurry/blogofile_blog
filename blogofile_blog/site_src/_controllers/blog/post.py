@@ -333,15 +333,10 @@ class Category(object):
 
 
 def create_guid(title, date):
-    # TODO: Refactor for life without 2to3 or 3to2.
-
-    #This tricky bit is not handled well with 2to3, so we have to hand
-    #craft the python2 translation:
-    if sys.version_info >= (3,):
-        to_hash = eval("bytes(date.isoformat() + title,\"utf-8\")")
-    else:
-        to_hash = eval("date.isoformat() + title.encode(\"utf-8\")")
-    return base64.urlsafe_b64encode(hashlib.sha1(to_hash).digest())
+    to_hash = (bytes(date.isoformat() + title, 'utf-8') if six.PY3
+               else date.isoformat() + title.encode('utf-8'))
+    hash = hashlib.sha1(to_hash).digest()
+    return base64.urlsafe_b64encode(hash).decode('ascii')
 
 
 def create_permalink(auto_permalink_path, site_url,

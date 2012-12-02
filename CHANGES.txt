@@ -1,6 +1,10 @@
 Next Release
 ============
 
+- Fix an issue whereby use of the post UUID (aka guid) in the
+  permalink caused TypeError due to bytes vs. string.
+  See https://github.com/EnigmaCurry/blogofile_blog/issues/14
+
 - Add ``md`` as a synonym for ``markdown`` to the default filters
   file extension list.
   See https://github.com/EnigmaCurry/blogofile_blog/issues/21
