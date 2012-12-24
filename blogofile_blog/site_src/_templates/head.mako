@@ -21,7 +21,7 @@
         href="${bf.util.site_path_helper('/css/handheld.css?v=1')}">
   <link rel="stylesheet"
         href="${bf.util.site_path_helper(
-                  bf.config.filters.syntax_highlight.css_dir,' /pygments_'
+                  bf.config.filters.syntax_highlight.css_dir, '/pygments_'
                   + bf.config.filters.syntax_highlight.style+'.css')}">
 
   <script
