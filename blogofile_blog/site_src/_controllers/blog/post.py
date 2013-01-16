@@ -195,7 +195,7 @@ class Post(object):
             if getattr(e, 'context_mark', None):
                 linenum = 1 + e.context_mark.line
             raise PostParseException(
-                "Post has bad YAML section: {0}:{1}".format(
+                "Post has bad YAML section: {0}:{1} {2}".format(
                     self.filename, linenum, str(e)))
         if not isinstance(y, dict):
             raise PostParseException(
