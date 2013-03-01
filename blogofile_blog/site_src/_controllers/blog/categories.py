@@ -65,7 +65,8 @@ def write_categories():
                 "category": category,
                 "posts": page_posts,
                 "prev_link": prev_link,
-                "next_link": next_link
+                "next_link": next_link,
+                "page_num": page_num
             }
             tools.materialize_template("chronological.mako", path, env)
             #Copy category/1 to category/index.html

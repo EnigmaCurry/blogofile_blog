@@ -35,7 +35,8 @@ def write_blog_chron(posts, root):
         env = {
             "posts": page_posts,
             "next_link": next_link,
-            "prev_link": prev_link
+            "prev_link": prev_link,
+            "page_num": page_num
         }
         tools.materialize_template("chronological.mako", fn, env)
         page_num += 1
