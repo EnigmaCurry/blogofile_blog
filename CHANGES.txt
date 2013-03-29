@@ -1,6 +1,10 @@
 Next Release
 ============
 
+- Add ``page_num`` to environment of categories and chronological
+  controllers so that it can be used in templates.
+  See https://github.com/EnigmaCurry/blogofile_blog/pull/27
+
 - Add YAML error message to "Post has bad YAML section" error message.
   See https://github.com/EnigmaCurry/blogofile_blog/pull/24
 
