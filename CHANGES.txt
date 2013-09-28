@@ -1,6 +1,9 @@
 Next Release
 ============
 
+- Change templates to load disqus with a protocol-relative URL.
+  See https://github.com/EnigmaCurry/blogofile_blog/pull/29
+
 - Add ``page_num`` to environment of categories and chronological
   controllers so that it can be used in templates.
   See https://github.com/EnigmaCurry/blogofile_blog/pull/27
