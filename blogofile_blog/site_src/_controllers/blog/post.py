@@ -140,7 +140,7 @@ class Post(object):
                     file_extension]
             except KeyError:
                 self.filters = []
-        self.content = bf.filter.run_chain(self.filters, post_src)
+        self.content = bf.filter.run_chain(self.filters, post_src, context=self)
 
     def __parse_post_excerpting(self):
         if blog_config.post_excerpts.enabled:
